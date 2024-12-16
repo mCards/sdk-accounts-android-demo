@@ -25,6 +25,14 @@ dependencyResolutionManagement {
                 username = githubUsername.get()
                 password = githubToken.get()
             }
+            url = uri("https://maven.pkg.github.com/Wantsa/sdk-accounts-android")
+            credentials {
+                username = githubUsername.get()
+                password = githubToken.get()
+            }
+            maven {
+                url = uri("https://maven.pkg.github.com/UseAlloy/alloy-codeless-lite-android")
+            }
         }
     }
 }

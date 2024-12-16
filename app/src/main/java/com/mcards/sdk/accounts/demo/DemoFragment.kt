@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.mcards.sdk.accounts.AccountsSdk
@@ -110,8 +111,14 @@ class DemoFragment : Fragment() {
                     }
 
                     t.result?.let {
-                        if (it.isNotEmpty()) {
-                            val account = it[0]
+                        activity?.runOnUiThread {
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Success")
+                                .setMessage("Success! Fetched " + it.size + " Accounts. Debug" +
+                                        " to inspect the data.")
+                                .setPositiveButton("Ok") { dialog, _ ->
+                                    dialog.dismiss()
+                                }.create().show()
                         }
                     } ?: t.errorMsg?.let {
                         activity?.runOnUiThread {

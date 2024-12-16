@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         AuthSdkProvider.getInstance().init(getString(R.string.auth0_domain),
             AUTH0_CLIENT_ID,
             AUTH0_AUD,
-            getString(R.string.auth0_scheme))
+            BuildConfig.APPLICATION_ID)
 
         AuthSdkProvider.getInstance().debug()
     }

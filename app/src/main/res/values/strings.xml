@@ -5,5 +5,4 @@
 
     <!-- TODO add your auth0 values gotten from the mCards team -->
     <string name="auth0_domain">mcards-test.au.auth0.com</string>
-    <string name="auth0_scheme">com.mcards.sdk.auth.demo</string>
 </resources>

@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.mcards.sdk.accounts.AccountsSdk
 import com.mcards.sdk.accounts.AccountsSdkProvider
 import com.mcards.sdk.accounts.demo.databinding.FragmentDemoBinding
-import com.mcards.sdk.accounts.model.FundingSource
+import com.mcards.sdk.accounts.model.Account
 import com.mcards.sdk.auth.AuthSdk
 import com.mcards.sdk.auth.AuthSdkProvider
 import com.mcards.sdk.auth.model.auth.User
@@ -89,9 +89,9 @@ class DemoFragment : Fragment() {
                 }
             })
 
-        accountsSdk.getFundingSources()
+        accountsSdk.getAccounts()
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(object : SingleObserver<SdkResult<Array<FundingSource>>> {
+            .subscribeWith(object : SingleObserver<SdkResult<Array<Account>>> {
                 override fun onSubscribe(d: Disposable) {
                     activity?.runOnUiThread {
                         binding.progressbar.visibility = View.VISIBLE
@@ -105,7 +105,7 @@ class DemoFragment : Fragment() {
                     }
                 }
 
-                override fun onSuccess(t: SdkResult<Array<FundingSource>>) {
+                override fun onSuccess(t: SdkResult<Array<Account>>) {
                     activity?.runOnUiThread {
                         binding.progressbar.visibility = View.GONE
                     }

@@ -20,12 +20,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url = uri("https://maven.pkg.github.com/Wantsa/sdk-auth-android")
-            credentials {
-                username = githubUsername.get()
-                password = githubToken.get()
-            }
-            url = uri("https://maven.pkg.github.com/Wantsa/sdk-accounts-android")
+            url = uri("https://maven.pkg.github.com/mymcard/sdk-bom-android")
             credentials {
                 username = githubUsername.get()
                 password = githubToken.get()

@@ -1,10 +1,10 @@
 [versions]
-agp = "8.8.1"
+agp = "8.8.2"
 kotlin = "2.1.10"
 sdkBom = "0.0.15"
 material = "1.12.0"
-constraintlayout = "2.2.0"
-navigation = "2.8.7"
+constraintlayout = "2.2.1"
+navigation = "2.8.8"
 
 [libraries]
 sdk-bom = { module = "com.mcards.sdk:bom", version.ref = "sdkBom" }

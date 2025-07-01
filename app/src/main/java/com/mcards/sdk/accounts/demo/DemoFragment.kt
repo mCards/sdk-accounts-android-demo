@@ -17,7 +17,7 @@ import com.mcards.sdk.auth.AuthSdk
 import com.mcards.sdk.auth.AuthSdkProvider
 import com.mcards.sdk.auth.model.auth.User
 import com.mcards.sdk.core.model.AuthTokens
-import com.mcards.sdk.core.network.SdkResult
+import com.mcards.sdk.core.network.model.SdkResult
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
@@ -46,7 +46,7 @@ class DemoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val loginCallback = object : AuthSdk.LoginCallback {
+        val loginCallback = object : AuthSdk.Auth0Callback {
             override fun onSuccess(
                 user: User,
                 tokens: AuthTokens,
@@ -69,9 +69,9 @@ class DemoFragment : Fragment() {
         val authSdk = AuthSdkProvider.getInstance()
         binding.loginBtn.setOnClickListener {
             if (userPhoneNumber.isBlank()) {
-                authSdk.login(requireContext(), TEST_PHONE_NUMBER, loginCallback)
+                authSdk.auth0Authenticate(requireContext(), TEST_PHONE_NUMBER, loginCallback)
             } else {
-                authSdk.login(requireContext(), userPhoneNumber, loginCallback)
+                authSdk.auth0Authenticate(requireContext(), userPhoneNumber, loginCallback)
             }
         }
     }
@@ -87,7 +87,7 @@ class DemoFragment : Fragment() {
             useFirebase =  false,
             object : AccountsSdk.InvalidTokenCallback {
                 override fun onTokenInvalid(): String {
-                    return AuthSdkProvider.getInstance().refreshTokens().accessToken
+                    return AuthSdkProvider.getInstance().refreshAuth0Tokens().accessToken
                 }
             })
 

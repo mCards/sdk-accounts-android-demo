@@ -84,7 +84,6 @@ class DemoFragment : Fragment() {
             requireContext(),
             accessToken,
             debug = true,
-            useFirebase =  false,
             object : AccountsSdk.InvalidTokenCallback {
                 override fun onTokenInvalid(): String {
                     return AuthSdkProvider.getInstance().refreshAuth0Tokens().accessToken

@@ -18,6 +18,7 @@ import com.mcards.sdk.auth.AuthSdkProvider
 import com.mcards.sdk.auth.model.auth.User
 import com.mcards.sdk.core.model.AuthTokens
 import com.mcards.sdk.core.network.model.SdkResult
+import com.mcards.sdk.core.util.LoggingCallback
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
@@ -89,6 +90,17 @@ class DemoFragment : Fragment() {
                     return AuthSdkProvider.getInstance().refreshAuth0Tokens().accessToken
                 }
             })
+
+        //optional, to use your standard logging methods. Needs to be set on each sdk individually
+        accountsSdk.setLoggingCallback(object : LoggingCallback {
+            override fun log(t: Throwable) {
+                //TODO log exception
+            }
+
+            override fun log(msg: String) {
+                //TODO log message
+            }
+        })
 
         accountsSdk.getAccounts()
             .observeOn(AndroidSchedulers.mainThread())

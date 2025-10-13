@@ -16,6 +16,7 @@ import com.mcards.sdk.accounts.model.Account
 import com.mcards.sdk.auth.AuthSdk
 import com.mcards.sdk.auth.AuthSdkProvider
 import com.mcards.sdk.auth.model.auth.User
+import com.mcards.sdk.core.InvalidTokenCallback
 import com.mcards.sdk.core.model.AuthTokens
 import com.mcards.sdk.core.network.model.SdkResult
 import com.mcards.sdk.core.util.LoggingCallback
@@ -85,7 +86,7 @@ class DemoFragment : Fragment() {
             requireContext(),
             accessToken,
             debug = true,
-            object : AccountsSdk.InvalidTokenCallback {
+            object : InvalidTokenCallback {
                 override fun onTokenInvalid(): String {
                     return AuthSdkProvider.getInstance().refreshAuth0Tokens().accessToken
                 }

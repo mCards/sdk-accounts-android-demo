@@ -2,7 +2,7 @@
 agp = "9.0.0"
 rxandroid = "3.0.2"
 rxjava = "3.1.12"
-sdkBom = "1.0.13"
+sdkBom = "1.0.14"
 material = "1.13.0"
 constraintlayout = "2.2.1"
 navigation = "2.9.7"
@@ -13,6 +13,7 @@ rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
 sdk-bom = { module = "com.mcards.sdk:bom", version.ref = "sdkBom" }
 sdk-accounts = { module = "com.mcards.sdk:accounts" }
 sdk-auth = { module = "com.mcards.sdk:auth" }
+sdk-cards = { module = "com.mcards.sdk:cards" }
 
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }

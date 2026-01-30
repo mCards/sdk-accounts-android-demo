@@ -58,6 +58,7 @@ dependencies {
 
     implementation(platform(libs.sdk.bom))
     implementation(libs.sdk.auth)
+    implementation(libs.sdk.cards)
     implementation(libs.sdk.accounts)
 }
 

@@ -7,17 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
-import com.mcards.sdk.accounts.AccountsSdk
 import com.mcards.sdk.accounts.AccountsSdkProvider
 import com.mcards.sdk.accounts.demo.databinding.FragmentDemoBinding
 import com.mcards.sdk.accounts.model.Account
 import com.mcards.sdk.auth.AuthSdk
 import com.mcards.sdk.auth.AuthSdkProvider
 import com.mcards.sdk.auth.model.auth.User
+import com.mcards.sdk.cards.CardsSdk
+import com.mcards.sdk.cards.CardsSdkProvider
 import com.mcards.sdk.core.InvalidTokenCallback
 import com.mcards.sdk.core.model.AuthTokens
+import com.mcards.sdk.core.model.card.Card
 import com.mcards.sdk.core.network.model.SdkResult
 import com.mcards.sdk.core.util.LoggingCallback
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -37,6 +40,9 @@ class DemoFragment : Fragment() {
     private var userPhoneNumber = ""
     private var accessToken = ""
     private var idToken = ""
+    private val cardsSdk = CardsSdkProvider.getInstance()
+    private val accountsSdk = AccountsSdkProvider.getInstance()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -58,7 +64,8 @@ class DemoFragment : Fragment() {
                 accessToken = tokens.accessToken
                 idToken = tokens.idToken
                 userPhoneNumber = user.userClaim.phoneNumber
-                initAccountsSdk()
+                initSdks()
+                getCards()
             }
 
             override fun onFailure(message: String) {
@@ -79,7 +86,16 @@ class DemoFragment : Fragment() {
     }
 
     @SuppressLint("CheckResult")
-    private fun initAccountsSdk() {
+    private fun initSdks() {
+        cardsSdk.init(requireActivity(),
+            accessToken,
+            debug = true,
+            object : InvalidTokenCallback {
+                override fun onTokenInvalid(): String {
+                    return AuthSdkProvider.getInstance().refreshAuth0Tokens().accessToken
+                }
+            })
+
         val accountsSdk = AccountsSdkProvider.getInstance()
 
         accountsSdk.init(
@@ -102,8 +118,52 @@ class DemoFragment : Fragment() {
                 //TODO log message
             }
         })
+    }
 
-        accountsSdk.getAccounts()
+    @SuppressLint("CheckResult")
+    private fun getCards() {
+        CardsSdkProvider.getInstance().getCardsList()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(object : SingleObserver<SdkResult<List<Card>>> {
+                override fun onSubscribe(d: Disposable) {
+                    activity?.runOnUiThread {
+                        binding.progressbar.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    activity?.runOnUiThread {
+                        binding.progressbar.visibility = View.GONE
+                        Snackbar.make(
+                            requireView(),
+                            e.localizedMessage!!,
+                            LENGTH_LONG
+                        ).show()
+                    }
+                }
+
+                override fun onSuccess(t: SdkResult<List<Card>>) {
+                    activity?.runOnUiThread {
+                        binding.progressbar.visibility = View.GONE
+                    }
+                    t.result?.let {
+                        if (it.isNotEmpty()) {
+                            val card = it[0]
+                            getAccounts(card.uuid!!)
+                        }
+                    } ?: t.errorMsg?.let {
+                        activity?.runOnUiThread {
+                            Snackbar.make(requireView(), it, LENGTH_LONG)
+                                .show()
+                        }
+                    }
+                }
+            })
+    }
+
+    @SuppressLint("CheckResult")
+    private fun getAccounts(cardId: String) {
+        accountsSdk.getAccounts(cardId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : SingleObserver<SdkResult<Array<Account>>> {
                 override fun onSubscribe(d: Disposable) {

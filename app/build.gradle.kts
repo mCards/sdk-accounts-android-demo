@@ -1,9 +1,7 @@
-import io.netty.util.internal.PlatformDependent.javaVersion
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
 }
 
 val javaVersion = JavaVersion.VERSION_17
@@ -60,6 +58,7 @@ dependencies {
 
     implementation(platform(libs.sdk.bom))
     implementation(libs.sdk.auth)
+    implementation(libs.sdk.cards)
     implementation(libs.sdk.accounts)
 }
 
